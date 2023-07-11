@@ -84,10 +84,11 @@ ward_pat['WARD_MBP'] = ward_pat['WARD_MBP'].astype(int)
 ward_group = ward_pat.groupby(['마취기록작성번호'])
 ward_group_mean = ward_group.mean().reset_index(drop=False)
 ward_group_mean = ward_group_mean[['마취기록작성번호', 'WARD_SBP', 'WARD_DBP', 'WARD_MBP']].astype(int)
-print(f"병동혈압 전처리 후 환자 수: len(ward_group_mean)")
+print(f"병동혈압 전처리 후 환자 수: {len(ward_group_mean)}")
 
-middle_pat = pd.merge(basic_pat, ward_group_mean, how='inner', on=['마취기록작성번호'])
-print(f"제거 전: {len(basic_pat)}, 병동 혈압 비정상으로 6066명 제거: {len(middle_pat)}")
+basic_18 = basic_pat[basic_pat['수술나이'] >= 18]
+middle_pat = pd.merge(basic_18, ward_group_mean, how='inner', on=['마취기록작성번호'])
+print(f"제거 전: {len(basic_18)}, 병동 혈압 비정상으로 6066명 제거: {len(middle_pat)}")
 
 import time
 middle_pat.to_excel("/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/middle_pat2.xlsx", index=False)

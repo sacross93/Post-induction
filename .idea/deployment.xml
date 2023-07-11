@@ -100,6 +100,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="wlsdud022@192.168.134.193:22 password (1)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="wlsdud022@192.168.44.111:22">
         <serverdata>
           <mappings>

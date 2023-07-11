@@ -36,4 +36,8 @@ for i in pat_diag_merge['마취기록작성번호'].unique():
     testap(len(pat_diag_merge[pat_diag_merge['마취기록작성번호'] == i]))
     if len(pat_diag_merge[pat_diag_merge['마취기록작성번호'] == i]) == 61:
         print(i)
-print(max(test))
+
+for i in pat_diag_merge[pat_diag_merge['마취기록작성번호'] == 20201000105961].iloc():
+    print(i)
+
+print(pat_diag_merge[pat_diag_merge['마취기록작성번호'] == 20201000105961])
