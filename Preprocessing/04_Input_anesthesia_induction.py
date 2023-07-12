@@ -41,4 +41,5 @@ print(len(anes_method))
 middle_18 = middle_pat[middle_pat['수술나이'] >= 18]
 test = pd.merge(middle_18, anes_method, how='inner', on=['마취기록작성번호'])
 
-anes_method.to_csv('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/method_anesthesia.csv', index=False, encoding='utf-8-sig')
+anes_method.to_csv('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/04_anesthesia_induction.csv', index=False, encoding='utf-8-sig')
+

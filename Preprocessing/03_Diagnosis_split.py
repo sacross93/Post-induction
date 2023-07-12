@@ -26,7 +26,7 @@ pat_diag_merge['마취기록작성번호'] = pat_diag_merge['마취기록작성�
 
 middle_diag_pat = pd.merge(middle_pat, pat_diag_merge, how='inner', on=['마취기록작성번호'])
 
-pat_diag_merge.to_csv('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/cut_diag_4word.csv', index=False, encoding='utf-8-sig')
+pat_diag_merge.to_csv('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/02_Diagnosis_split.csv', index=False, encoding='utf-8-sig')
 
 print(len(pat_diag_merge['IDC'].unique()))
 pat_diag_merge = pat_diag_merge.drop_duplicates(['마취기록작성번호', 'IDC'])
@@ -41,3 +41,16 @@ for i in pat_diag_merge[pat_diag_merge['마취기록작성번호'] == 2020100010
     print(i)
 
 print(pat_diag_merge[pat_diag_merge['마취기록작성번호'] == 20201000105961])
+
+test2 = pat_diag_merge.groupby('IDC')
+
+test2.count().to_csv('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/02_debug.csv', encoding='utf-8-sig')
+
+import matplotlib.pyplot as plt
+
+a = test2.count()
+b = a['마취기록작성번호'].to_numpy()
+c = a.index.to_numpy()
+
+plt.scatter(x = c, y = b)
+plt.show()
