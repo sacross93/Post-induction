@@ -42,7 +42,7 @@ print(f"병동혈압 전처리 후 환자 수: {len(ward_group_mean)}")
 ward_group_mean.to_excel(preprocessing_path+"06_Ward_BP.xlsx", index=False)
 # middle_pat = pd.merge(basic_data, ward_group_mean, how='inner', on=['마취기록작성번호'])
 #
-# print(f"제거 전: {len(basic_data)}, 병동 혈압 비정상으로 {len(basic_data) - len(middle_pat)}명 제거: {len(middle_pat)}")
+print(f"제거 전: {len(basic_data)}, 병동 혈압 비정상으로 {len(basic_data) - len(middle_pat)}명 제거: {len(middle_pat)}")
 
 # anesthetic = pd.read_csv(preprocessing_path+'05_anesthetic.csv')
 
