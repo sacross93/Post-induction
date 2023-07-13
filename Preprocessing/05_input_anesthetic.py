@@ -105,6 +105,11 @@ false_data = maintenance[maintenance['마취기록작성번호'].isin(test['마�
 false_data = false_data[['마취기록작성번호', '마취기록이벤트내용', '마취기록이벤트내용_bracket_ver2']]
 false_data.to_csv('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/05_False_data_maintenace.csv', index=False, encoding='utf-8-sig')
 
-len(anes_induction)
+gas_drug_info = gas_drug_info.rename(columns={"마취기록작성번호 ": "마취기록작성번호"})
+gas_drug_info = gas_drug_info[gas_drug_info['연속/일회구분명'] != '일회성']
 
-anes_induction[anes_induction['마취기록작성번호'] == 20191100048034]
+maintenance_gas = gas_drug_info[gas_drug_info['입력항목명'].str.contains(r'(Propofol|propofol)|Sevoflurane|Desflurane')]
+maintenance_gas = maintenance_gas[maintenance_gas['마취기록작성번호'].isin(anes_induction['마취기록작성번호'].unique())]
+len(maintenance_gas['마취기록작성번호'].unique())
+len(anes_induction['마취기록작성번호'].unique())
+83466 - 83380
