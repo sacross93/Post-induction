@@ -110,6 +110,37 @@ gas_drug_info = gas_drug_info[gas_drug_info['연속/일회구분명'] != '일회
 
 maintenance_gas = gas_drug_info[gas_drug_info['입력항목명'].str.contains(r'(Propofol|propofol)|Sevoflurane|Desflurane')]
 maintenance_gas = maintenance_gas[maintenance_gas['마취기록작성번호'].isin(anes_induction['마취기록작성번호'].unique())]
-len(maintenance_gas['마취기록작성번호'].unique())
-len(anes_induction['마취기록작성번호'].unique())
-83466 - 83380
+
+maintenance_df = maintenance_gas[['마취기록작성번호', '입력항목명']]
+maintenance_df = maintenance_df.reset_index(drop=True)
+
+maintenance_idx = maintenance_df['마취기록작성번호'].to_numpy()
+main_propofol = np.zeros(len(maintenance_idx))
+main_sevo = np.zeros(len(maintenance_idx))
+main_dex = np.zeros(len(maintenance_idx))
+
+for i in event_info['마취기록작성번호'][(event_info['마취기록이벤트내용_bracket_ver2'].str.contains(r'Propofol|propofol'))].unique():
+    temp_idx = np.where(maintenance_idx == i)[0]
+    if len(temp_idx) == 0 :
+        continue
+    temp_idx = temp_idx[0]
+    main_propofol[temp_idx] = 1
+for i in event_info['마취기록작성번호'][(event_info['마취기록이벤트내용_bracket_ver2'].str.contains('Sevoflurane'))].unique():
+    temp_idx = np.where(maintenance_idx == i)[0]
+    if len(temp_idx) == 0 :
+        continue
+    temp_idx = temp_idx[0]
+    main_sevo[temp_idx] = 1
+for i in event_info['마취기록작성번호'][(event_info['마취기록이벤트내용_bracket_ver2'].str.contains('Desflurane'))].unique():
+    temp_idx = np.where(maintenance_idx == i)[0]
+    if len(temp_idx) == 0 :
+        continue
+    temp_idx = temp_idx[0]
+    main_dex[temp_idx] = 1
+
+maintenance_fix = pd.DataFrame({'마취기록작성번호': maintenance_idx, 'propofol': main_propofol, 'sevoflurane': main_sevo, 'desflurane': main_dex})
+maintenance_df.to_csv('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/05_maintenance_gas.csv', index=False, encoding='utf-8-sig')
+
+maintenance_fix[(maintenance_fix['propofol'] == 0) & (maintenance_fix['desflurane'] == 0) & (maintenance_fix['desflurane'] == 0)]
+
+maintenance_df

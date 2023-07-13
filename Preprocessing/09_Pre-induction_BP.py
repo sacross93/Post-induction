@@ -59,3 +59,8 @@ for i in basic_pat['마취기록작성번호']:
     dbp.append(df_dbp[0])
     anes_num.append(i)
 
+df = pd.DataFrame({"마취기록작성번호": anes_num, 'Pre-induction_SBP': sbp, 'Pre-induction_DBP': dbp})
+df['Pre-induction_MBP'] = (df['Pre-induction_SBP'] + (2*df['Pre-induction_DBP'])) /3
+df = df.astype(int)
+
+df.to_csv('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/09_Pre-induction_BP.csv', index=False, encoding='utf-8-sig')
