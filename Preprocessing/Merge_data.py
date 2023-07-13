@@ -69,5 +69,11 @@ basic_BP.to_excel(preprocessing_path+'Post-induction_data_set_ver2.xlsx', index=
 
 ## 진단코드 더미 읽기
 diagnosis = pd.read_csv(preprocessing_path+'07_Diagnosis_dummies.csv')
+
+## 진단코드가 현재 데이터셋에 얼마나 적합한지 확인하기
 basic_BP[basic_BP['마취기록작성번호'].isin(diagnosis['마취기록작성번호'].unique())]
+## 100% 적합
+
+
+
 
