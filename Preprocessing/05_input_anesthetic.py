@@ -67,8 +67,8 @@ for i in event_info['마취기록작성번호'][(event_info['마취기록이벤�
     pentotal[temp_idx] = 1
 
 anes_induction = pd.DataFrame({'마취기록작성번호': basic_index, 'propofol':propofol, 'midazolam':midazolam, 'pentotal':pentotal})
-anes_induction.to_excel('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/05_anesthetic.xlsx', index=False)
-
+# anes_induction.to_excel('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/05_anesthetic.xlsx', index=False)
+anes_induction = anes_induction[(anes_induction['propofol'] != 0) | (anes_induction['midazolam'] != 0) | (anes_induction['pentotal'] != 0)]
 true_anesthetic = anes_induction[(anes_induction['propofol'] != 0) | (anes_induction['midazolam'] != 0) | (anes_induction['pentotal'] != 0)].astype(int)
 true_anesthetic.to_csv('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/05_anesthetic.csv', index=False, encoding='utf-8-sig')
 
@@ -96,4 +96,15 @@ true_anesthetic.to_csv('/srv/project_data/EMR/jy/Post-induction/Input_preprocess
 ###################################################################################################################################################################
 
 # 유지제 코딩
+anes_list = anes_induction['마취기록작성번호'].unique()
+maintenance = event_info[event_info['마취기록작성번호'].isin(anes_list)]
 
+test = maintenance[maintenance['마취기록이벤트내용_bracket_ver2'].str.contains(r'([0-9]%(propofol|freefol|fresfol))|des|sev')]
+print(len(test['마취기록작성번호'].unique()))
+false_data = maintenance[maintenance['마취기록작성번호'].isin(test['마취기록작성번호'].unique()) == False]
+false_data = false_data[['마취기록작성번호', '마취기록이벤트내용', '마취기록이벤트내용_bracket_ver2']]
+false_data.to_csv('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/05_False_data_maintenace.csv', index=False, encoding='utf-8-sig')
+
+len(anes_induction)
+
+anes_induction[anes_induction['마취기록작성번호'] == 20191100048034]
