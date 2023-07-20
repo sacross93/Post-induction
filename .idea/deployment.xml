@@ -5,7 +5,9 @@
       <paths name="wlsdud022@192.168.134.193:22">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/srv/project_code/wlsdud022/Post-induction" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/srv/project_code/wlsdud022/common" local="$PROJECT_DIR$/../biosignalresearch" />
+            <mapping local="" />
           </mappings>
         </serverdata>
       </paths>
