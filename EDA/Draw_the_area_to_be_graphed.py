@@ -35,16 +35,16 @@ df_bp['측정값'] = df_bp['측정값'].astype(float)
 df_bp['모니터링기록일시'] = pd.to_datetime(df_bp['모니터링기록일시'])
 pl_df = pl.from_pandas(df_bp)
 df_mbp = df_bp[df_bp['모니터링약어명'].str.contains('M')]
-
+from datetime import timedelta
 for anes_num, anes_time, surgery_time in zip(anes['마취기록작성번호'], anes['(마취기록)마취시작'], anes['(마취기록)수술시작']):
-    pat_data = df_mbp[(df_mbp['마취기록작성번호'] == anes_num) & (df_mbp['모니터링기록일시'] >= anes_time) & (df_mbp['모니터링기록일시'] <= surgery_time)].reset_index(drop=True)
+    pat_data = df_mbp[(df_mbp['마취기록작성번호'] == anes_num) & (df_mbp['모니터링기록일시'] >= anes_time) & (df_mbp['모니터링기록일시'] <= surgery_time + timedelta(minutes=10))].reset_index(drop=True)
     if any(pat_data['측정값'] < 60) == False:
         print(f"{anes_num} 저혈압 없음")
         continue
     pat_data['minute'] = ((pat_data['모니터링기록일시'] - pat_data['모니터링기록일시'].min()).dt.total_seconds() / 60)
     pat_data['minute'] = pat_data['minute'].astype(int)
     break
-
+pat_data
 ###
 import sys
 sys.getsizeof(df)
@@ -66,6 +66,7 @@ tnew = np.arange(total_time / area_dt + 1) * area_dt
 vnew = f(tnew)
 ind = np.where(vnew < 60)[0]
 hvnew = vnew[ind]
+area = np.sum(60 - hvnew) * 0.1
 
 # plt.style.use('seaborn-v0_8-whitegrid')
 # mpl.rcParams['font.family'] = 'serif'
@@ -95,8 +96,8 @@ plt.plot(tnew,vnew,'b',linewidth=2, label="ABP_M")
 # plt.ylim([30,170])
 plt.axhline(60, color='red', label="Hypotension threshold")
 plt.axvline(tnew.min(), color='black', linestyle='dashed')
-plt.axvline(tnew.max(), color='black', linestyle='dashed')
-plt.xlim([-2,72])
+plt.axvline(70, color='black', linestyle='dashed')
+plt.xlim([-2,82])
 plt.ylim([40,100])
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
@@ -110,18 +111,26 @@ poly = Polygon(verts, facecolor='0.7', edgecolor='0.5', label='Hypotension area'
 ax.add_patch(poly)
 plt.xlabel("Minute of surgery", size=20, weight=500, labelpad=3)
 plt.ylabel("Mean Blood Pressure (mmHg)", size=20, weight=500, labelpad=3)
-plt.legend(fontsize=12, bbox_to_anchor = (0.95, 1))
+# plt.legend(fontsize=12, bbox_to_anchor = (0.85, 1))
+# plt.legend(fontsize=12, loc='upper left')
+plt.legend(fontsize=12, bbox_to_anchor = (0.05, 1))
 plt.annotate('Induction',
             xy=(18.5, -17), xycoords='axes points',
             xytext=(0, -40), textcoords='offset points',
             arrowprops=dict(facecolor='black', shrink=0.05),
             fontsize=16)
 plt.annotate('Incision',
-            xy=(652, -17), xycoords='axes points',
+            xy=(573, -17), xycoords='axes points',
             xytext=(0, -40), textcoords='offset points',
             arrowprops=dict(facecolor='black', shrink=0.05),
             fontsize=16)
+font1 = {'family': 'sans_serif',
+        'color':  'black',
+        'weight': 'normal',
+        'size': 22}
+plt.text(13, 78, f'{int(0.1*len(ind))} minutes of MAP < 60 mmHg', fontdict=font1)
+plt.show()
 # plt.savefig('/srv/project_data/EMR/jy/Post-induction/fig1.png', bbox_inches='tight', dpi=300)
-fig.savefig('/srv/project_data/EMR/jy/Post-induction/fig1.png', bbox_inches='tight', dpi=300)
+# fig.savefig('/srv/project_data/EMR/jy/Post-induction/fig1.png', bbox_inches='tight', dpi=300)
 
 ##############################
