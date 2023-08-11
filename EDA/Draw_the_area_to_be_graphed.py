@@ -124,13 +124,13 @@ plt.annotate('Incision',
             xytext=(0, -40), textcoords='offset points',
             arrowprops=dict(facecolor='black', shrink=0.05),
             fontsize=16)
-font1 = {'family': 'sans_serif',
+font1 = {'family': 'sans-serif',
         'color':  'black',
         'weight': 'normal',
         'size': 22}
-plt.text(13, 78, f'{int(0.1*len(ind))} minutes of MAP < 60 mmHg', fontdict=font1)
-plt.show()
+plt.text(8, 80, f'{int(0.1*len(ind))} minutes of MAP < 60 mmHg', fontdict=font1)
+# plt.show()
 # plt.savefig('/srv/project_data/EMR/jy/Post-induction/fig1.png', bbox_inches='tight', dpi=300)
-# fig.savefig('/srv/project_data/EMR/jy/Post-induction/fig1.png', bbox_inches='tight', dpi=300)
+fig.savefig('/srv/project_data/EMR/jy/Post-induction/fig1.png', bbox_inches='tight', dpi=300)
 
 ##############################
