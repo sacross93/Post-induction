@@ -96,6 +96,6 @@ test_polars = pl.from_numpy(data = data_array, schema = column_names)
 polars_test = test_ABP[['마취기록작성번호', '모니터링약어명', '모니터링기록일시', '측정값']]
 polars_df = pl.from_pandas(polars_test)
 polars_df.filter((pl.col('측정값') > 300) | (pl.col('측정값') < 5))
-pl_df.filter(
-    (pl.col('모니터링약어명').str.contains('S')) & (pl.col('측정값') >)
+polars_df.filter(
+    (pl.col('모니터링약어명').str.contains('S')) & (pl.col('측정값') > 60)
 )
