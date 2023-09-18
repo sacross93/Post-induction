@@ -64,6 +64,8 @@ sns.set_palette("Set2")
 
 
 for idx, anes_info in enumerate(anes.iloc):
+    if idx < 1000:
+        continue
     temp_pq = temp_mbp[temp_mbp['마취기록작성번호'] == anes_info['마취기록작성번호']].reset_index(drop=True)
     if temp_pq.empty:
         continue
@@ -72,7 +74,7 @@ for idx, anes_info in enumerate(anes.iloc):
     if temp_hypotension.size == 0:
         continue
     else:
-        temp_outliar = np.where((np.diff(temp_pq['측정값'].values[0:3]) > 30) | (np.diff(temp_pq['측정값'].values[0:3]) < -30))[0]
+        temp_outliar = np.where((np.diff(temp_pq['측정값'].values[0:3]) > 50) | (np.diff(temp_pq['측정값'].values[0:3]) < -50))[0]
         if temp_outliar.size == 0 :
             continue
     mt_ts = (temp_pq['모니터링기록일시'].values.astype('int') / 10 ** 9).astype('int32')
@@ -95,18 +97,6 @@ for idx, anes_info in enumerate(anes.iloc):
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
     plt.show()
-    if idx >= 100:
+    if idx >= 1500:
         break
 plt.close()
-
-temp_hypotension = np.where(temp_pq['측정값'].values[0:3] < 60)[0]
-if temp_hypotension.size == 0:
-    continue
-else:
-    break
-
-temp_hypotension
-
-temp_outliar
-
-
