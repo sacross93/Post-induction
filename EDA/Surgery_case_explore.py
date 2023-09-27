@@ -115,7 +115,6 @@ nibp_df = pd.merge(nibp_df, nimbp_df, how='inner', on=['마취기록작성번호
 nibp_df.rename(columns={'측정값':'mbp'}, inplace=True)
 
 
-
 nibp_df = nibp_df[['병원등록번호','마취기록작성번호', '모니터링기록일시', 'sbp', 'mbp', 'dbp']]
 print(f"BP를 측정한 수술 건수: {len(nibp_df['마취기록작성번호'].unique())} \nBP row 갯수 {len(nibp_df['마취기록작성번호'])}")
 
@@ -171,6 +170,7 @@ for i in list_bp:
     plt.yticks(fontsize=16)
     plt.show()
 
+mbp_abp = abp_df.copy()
 
 abp_df = abp_df[(abp_df['mbp'] < abp_df['sbp']) & (abp_df['mbp'] > abp_df['dbp'])]
 abp_df['mbp'].min()
@@ -178,6 +178,35 @@ abp_df['mbp'].max()
 abp_df['mbp'].mean()
 len(abp_df['mbp'])
 len(abp_df['마취기록작성번호'].unique())
+
+
+abp_df = abp_df[(abp_df['mbp'] > abp_df['sbp']) | (abp_df['mbp'] < abp_df['dbp'])]
+len(mbp_abp)
+len(abp_df)
+
+for idx, num_anes in enumerate(abp_df['마취기록작성번호'].unique()):
+    if idx < 200 :
+        continue
+    temp = mbp_abp[mbp_abp['마취기록작성번호']==num_anes]
+    temp = temp.sort_values(by='모니터링기록일시', ascending=True).reset_index(drop=True)
+    temp['minute'] = (temp['모니터링기록일시'] - temp['모니터링기록일시'].min()).dt.total_seconds() / 60
+    plt.figure(figsize=(12, 8))
+    plt.plot(temp['minute'], temp['sbp'], label='sbp', marker='o')
+    plt.plot(temp['minute'], temp['dbp'], label='dbp', marker='o')
+    plt.plot(temp['minute'], temp['mbp'], label='mbp', marker='o')
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.legend()
+    plt.show()
+    if idx == 210:
+        plt.close()
+        break
+
+
+
+
+
+
 for i in list_bp:
     plt.figure(figsize=(12,8))
     plt.hist(abp_df[i], bins=40)
@@ -300,3 +329,4 @@ temp2 = test2['0&1'][['마취기록작성번호', '병원등록번호']]
 a = pd.concat([temp1,temp2])
 
 len(a['마취기록작성번호'].unique())
+
