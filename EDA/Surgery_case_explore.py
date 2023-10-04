@@ -55,7 +55,7 @@ df = pd.DataFrame(data_array, columns=column_names)
 df['마취기록작성번호'] = df['마취기록작성번호'].astype(int)
 bp_df = df[df['모니터링약어명'].str.contains('BP')]
 len(bp_df['마취기록작성번호'].unique())
-
+len(bp_df)
 
 test[(test['모니터링기록일시'] >= '2020-07-09 11:41:00') & (test['모니터링기록일시'] <= '2020-07-09 11:53:00')]
 
