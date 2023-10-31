@@ -122,13 +122,6 @@ maintenance_fix[(maintenance_fix['propofol'] == 0) & (maintenance_fix['desfluran
 maintenance_df
 
 
-
-
-
-
-
-
-
 ################################################### Volume test
 
 event_info.keys()
@@ -191,3 +184,12 @@ t_df = pd.DataFrame(t_data)
 t_df.to_excel('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/induction/t_df.xlsx')
 
 print(event_info['마취기록이벤트내용'].iloc[6418])
+
+aa = test[pd.isnull(test['raw']) == False]
+
+aa = aa[['마취기록작성번호', '마취기록이벤트기록일시', 'raw', 'Drug', 'Dosage' , '마취기록이벤트내용', '마취기록이벤트내용_bracket_ver2']]
+aa.to_excel('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/induction/propofol_df.xlsx')
+aa['not_mg'] = aa['Dosage'].str.replace('mg','')
+aa['plus'] = aa['not_mg'].str.extractall(r'(\d+)').astype(int).groupby(level=0).sum()
+aa = aa[['마취기록작성번호', '마취기록이벤트기록일시', 'raw', 'Drug', 'Dosage', 'plus', '마취기록이벤트내용', '마취기록이벤트내용_bracket_ver2']]
+aa.to_excel('/srv/project_data/EMR/jy/Post-induction/Input_preprocessing/induction/propofol_plus.xlsx')
